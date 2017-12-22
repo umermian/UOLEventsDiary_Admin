@@ -15,8 +15,6 @@ import com.example.popie.uoleventsdiary_admin.Retrofit.Remote;
 import com.google.gson.Gson;
 
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class UpdateActivity extends AppCompatActivity {
@@ -37,7 +35,7 @@ public class UpdateActivity extends AppCompatActivity {
         etName = findViewById(R.id.etName);
         etDataTime = findViewById(R.id.etDateTime);
         etVenue = findViewById(R.id.etVenue);
-        etOrganizer = findViewById(R.id.etOrganizer);
+        etOrganizer = findViewById(R.id.spinner);
         etPhone = findViewById(R.id.etPhone);
 
         btnUpdate = findViewById(R.id.btnUpdate);

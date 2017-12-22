@@ -3,8 +3,11 @@ package com.example.popie.uoleventsdiary_admin.Activities;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.popie.uoleventsdiary_admin.Client.UserClient;
@@ -20,10 +23,13 @@ import retrofit2.Retrofit;
 public class AddNewActivity extends AppCompatActivity {
 
     Button btnAdd;
-    EditText etName, etDateTime, etVenue, etOrganizer, etPhone;
+    EditText etName, etDateTime, etVenue, etPhone;
+    Spinner spinner;
     String name, dateTime, venue, organizer, phone;
     Retrofit retrofit;
     UserClient userClient;
+    ArrayAdapter<CharSequence> arrayAdapter;
+    int o_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,14 +39,31 @@ public class AddNewActivity extends AppCompatActivity {
         etName = findViewById(R.id.etName);
         etDateTime = findViewById(R.id.etDateTime);
         etVenue = findViewById(R.id.etVenue);
-        etOrganizer = findViewById(R.id.etOrganizer);
         etPhone = findViewById(R.id.etPhone);
 
+        spinner = findViewById(R.id.spinner);
+
         btnAdd = findViewById(R.id.btnUpdate);
+
+        arrayAdapter = ArrayAdapter.createFromResource(this, R.array.organizers, R.layout.support_simple_spinner_dropdown_item);
+
+        spinner.setAdapter(arrayAdapter);
 
         retrofit = Remote.getRetrofit();
 
         userClient = retrofit.create(UserClient.class);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                o_id = position + 12;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
@@ -56,10 +79,9 @@ public class AddNewActivity extends AppCompatActivity {
         name = etName.getText().toString();
         dateTime = etDateTime.getText().toString();
         venue = etVenue.getText().toString();
-        organizer = etOrganizer.getText().toString();
         phone = etPhone.getText().toString();
 
-        Call<Event> call = userClient.saveEvent("abcdef", name, dateTime, venue, phone, 12, 17);
+        Call<Event> call = userClient.saveEvent("abcdef", name, dateTime, venue, phone, 12, o_id);
 
         call.enqueue(new Callback<Event>() {
 
@@ -72,7 +94,6 @@ public class AddNewActivity extends AppCompatActivity {
                     etName.setText("");
                     etDateTime.setText("");
                     etVenue.setText("");
-                    etOrganizer.setText("");
                     etPhone.setText("");
                 } else {
                     Toast.makeText(getApplicationContext(), "Response Failure", Toast.LENGTH_SHORT).show();

@@ -39,7 +39,6 @@ public class LoginActivity extends AppCompatActivity {
     ViewGroup viewGroup;   //
     String email, password; // to check if user logged out or not
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
