@@ -64,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
         password = sharedPreferences.getString("password", "");
 
         if (email != "" && password != "") {
-            Intent intent = new Intent(LoginActivity.this, ManageEventsActivity.class);
+            Intent intent = new Intent(LoginActivity.this, Navigation_Drawer.class);
             startActivity(intent);
             finish();
 
@@ -95,10 +95,11 @@ public class LoginActivity extends AppCompatActivity {
                     editor.putString("password", "admin123");
                     editor.apply();
                     token = response.body().getData().getApiToken();
-                    Intent intent = new Intent(LoginActivity.this, ManageEventsActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, Navigation_Drawer.class);
                     intent.putExtra("token", token);
+                    intent.putExtra("email","admin123@gmail.com");
                     startActivity(intent);
-                    Toast.makeText(getApplicationContext(), "Welcome Admin", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Welcome Admin!", Toast.LENGTH_SHORT).show();
                     finish();
                 } else {
                     Toast.makeText(getApplicationContext(), "Unsuccessful Response", Toast.LENGTH_SHORT).show();

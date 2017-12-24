@@ -66,7 +66,7 @@
         android:id="@+id/etVenue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/spinner"
+        android:layout_above="@+id/spinnerUpdate"
         android:layout_alignStart="@+id/etDateTime"
         android:ems="10"
         android:hint="venue"
@@ -76,13 +76,13 @@
         android:id="@+id/textView13"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/spinner"
-        android:layout_alignBottom="@+id/spinner"
+        android:layout_alignBaseline="@+id/spinnerUpdate"
+        android:layout_alignBottom="@+id/spinnerUpdate"
         android:layout_alignStart="@+id/textView11"
         android:text="@string/organiser" />
 
     <Spinner
-        android:id="@+id/spinner"
+        android:id="@+id/spinnerUpdate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/etPhone"

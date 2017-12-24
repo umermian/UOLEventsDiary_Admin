@@ -53,8 +53,15 @@ public interface UserClient {
 
     //to update a current event
     @PUT("events/{event}")
+    @FormUrlEncoded
     Call<Event> updateEvent(@Path("event") int id,
-                            @Body Event event);
+                            @Field("image") String image,
+                            @Field("name") String name,
+                            @Field("date_time") String dateTime,
+                            @Field("venue") String venue,
+                            @Field("phone") String phone,
+                            @Field("u_id") int u_id,
+                            @Field("o_id") int o_id);
 
     //to delete an event
     @DELETE("events/{event}")

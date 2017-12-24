@@ -23,7 +23,6 @@ import com.example.popie.uoleventsdiary_admin.R;
 import com.example.popie.uoleventsdiary_admin.Retrofit.Remote;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import retrofit2.Call;
@@ -55,7 +54,7 @@ public class AddNewActivity extends AppCompatActivity {
         etVenue = findViewById(R.id.etVenue);
         etPhone = findViewById(R.id.etPhone);
 
-        spinner = findViewById(R.id.spinner);
+        spinner = findViewById(R.id.spinnerUpdate);
 
         btnAdd = findViewById(R.id.btnUpdate);
 

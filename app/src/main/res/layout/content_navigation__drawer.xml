@@ -8,4 +8,5 @@
     tools:context="com.example.popie.uoleventsdiary_admin.NavigationDrawer.Navigation_Drawer"
     tools:showIn="@layout/app_bar_navigation__drawer">
 
+
 </android.support.constraint.ConstraintLayout>
