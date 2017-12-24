@@ -92,20 +92,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             @Override
             public void onClick(View v) {
 
-
+                Toast.makeText(context, "Id: " + event.getId(), Toast.LENGTH_SHORT).show();
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setCancelable(true).setTitle("Alert").setMessage("Are you sure you want to delete this event?");
 
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Event e = events.get(event.getId());
-                        Call<Void> call = userClient.deleteEvent(e.getId());
+
+                        Call<Void> call = userClient.deleteEvent(event.getId());
                         call.enqueue(new Callback<Void>() {
                             @Override
                             public void onResponse(Call<Void> call, Response<Void> response) {
                                 if (response.isSuccessful()) {
-                                    onRemove(event.getId());
+                                    onRemove(position);
                                     Toast.makeText(context, "Deleted Successfully", Toast.LENGTH_SHORT).show();
                                 } else {
                                     Toast.makeText(context, "Response Failure", Toast.LENGTH_SHORT).show();

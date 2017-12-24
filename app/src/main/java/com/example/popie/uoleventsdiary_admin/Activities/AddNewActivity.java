@@ -119,7 +119,7 @@ public class AddNewActivity extends AppCompatActivity {
                     etPhone.setText("");
                     imageView.setImageResource(R.drawable.ic_launcher_background);
                 } else {
-                    Toast.makeText(getApplicationContext(), "Response Failure", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Response Failure, enter correct information and try again", Toast.LENGTH_SHORT).show();
                 }
             }
 
