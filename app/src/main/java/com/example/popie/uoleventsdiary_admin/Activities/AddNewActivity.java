@@ -1,12 +1,19 @@
 package com.example.popie.uoleventsdiary_admin.Activities;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -15,6 +22,10 @@ import com.example.popie.uoleventsdiary_admin.Models.Event;
 import com.example.popie.uoleventsdiary_admin.R;
 import com.example.popie.uoleventsdiary_admin.Retrofit.Remote;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -22,10 +33,12 @@ import retrofit2.Retrofit;
 
 public class AddNewActivity extends AppCompatActivity {
 
+    final static int GET_FROM_GALLERY = 3;
+    ImageView imageView;
     Button btnAdd;
     EditText etName, etDateTime, etVenue, etPhone;
     Spinner spinner;
-    String name, dateTime, venue, organizer, phone;
+    String image, name, dateTime, venue, phone;
     Retrofit retrofit;
     UserClient userClient;
     ArrayAdapter<CharSequence> arrayAdapter;
@@ -36,6 +49,7 @@ public class AddNewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new);
 
+        imageView = findViewById(R.id.imageView2);
         etName = findViewById(R.id.etName);
         etDateTime = findViewById(R.id.etDateTime);
         etVenue = findViewById(R.id.etVenue);
@@ -52,6 +66,13 @@ public class AddNewActivity extends AppCompatActivity {
         retrofit = Remote.getRetrofit();
 
         userClient = retrofit.create(UserClient.class);
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY);
+            }
+        });
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -81,7 +102,8 @@ public class AddNewActivity extends AppCompatActivity {
         venue = etVenue.getText().toString();
         phone = etPhone.getText().toString();
 
-        Call<Event> call = userClient.saveEvent("abcdef", name, dateTime, venue, phone, 12, o_id);
+
+        Call<Event> call = userClient.saveEvent(image, name, dateTime, venue, phone, 12, o_id);
 
         call.enqueue(new Callback<Event>() {
 
@@ -95,6 +117,7 @@ public class AddNewActivity extends AppCompatActivity {
                     etDateTime.setText("");
                     etVenue.setText("");
                     etPhone.setText("");
+                    imageView.setImageResource(R.drawable.ic_launcher_background);
                 } else {
                     Toast.makeText(getApplicationContext(), "Response Failure", Toast.LENGTH_SHORT).show();
                 }
@@ -107,5 +130,31 @@ public class AddNewActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+
+        //Detects request codes
+        if (requestCode == GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
+            Uri selectedImage = data.getData();
+            Bitmap bitmap = null;
+
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
+                imageView.setImageBitmap(bitmap);
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 70, baos);
+                byte[] b = baos.toByteArray();
+                image = Base64.encodeToString(b, Base64.NO_WRAP);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+        }
     }
 }

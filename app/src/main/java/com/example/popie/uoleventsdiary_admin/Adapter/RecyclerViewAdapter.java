@@ -1,10 +1,13 @@
 package com.example.popie.uoleventsdiary_admin.Adapter;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +24,7 @@ import com.example.popie.uoleventsdiary_admin.Retrofit.Remote;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -36,11 +40,11 @@ import retrofit2.Retrofit;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ContactViewHolder> {
 
 
-    private int delete;
     private Retrofit retrofit;
     private UserClient userClient;
     private Context context;
     private List<Event> events;
+
 
     public RecyclerViewAdapter(Context context, List<Event> events) {
         this.context = context;
@@ -59,11 +63,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     @Override
-    public void onBindViewHolder(RecyclerViewAdapter.ContactViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerViewAdapter.ContactViewHolder holder, final int position) {
 
-        delete = position;
+
         final Event event = events.get(position);
-
 
         Picasso.with(context)
                 .load(R.drawable.picture)
@@ -75,6 +78,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                Toast.makeText(context, "Id: " + event.getId(), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(context, UpdateActivity.class);
                 Gson gson = new Gson();
                 String eventData = gson.toJson(event);
@@ -87,18 +92,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             @Override
             public void onClick(View v) {
 
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setCancelable(true).setTitle("Alert").setMessage("Are you sure you want to delete this event?");
 
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Call<Void> call = userClient.deleteEvent(event.getId());
+                        Event e = events.get(event.getId());
+                        Call<Void> call = userClient.deleteEvent(e.getId());
                         call.enqueue(new Callback<Void>() {
                             @Override
                             public void onResponse(Call<Void> call, Response<Void> response) {
                                 if (response.isSuccessful()) {
-                                    onRemove(delete);
+                                    onRemove(event.getId());
                                     Toast.makeText(context, "Deleted Successfully", Toast.LENGTH_SHORT).show();
                                 } else {
                                     Toast.makeText(context, "Response Failure", Toast.LENGTH_SHORT).show();

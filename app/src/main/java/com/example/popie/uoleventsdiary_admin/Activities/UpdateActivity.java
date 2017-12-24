@@ -1,11 +1,15 @@
 package com.example.popie.uoleventsdiary_admin.Activities;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.popie.uoleventsdiary_admin.Client.UserClient;
@@ -26,6 +30,8 @@ public class UpdateActivity extends AppCompatActivity {
     Retrofit retrofit;
     Call<Event> call;
     UserClient userClient;
+    ImageView imageView;
+    Bitmap bm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +43,7 @@ public class UpdateActivity extends AppCompatActivity {
         etVenue = findViewById(R.id.etVenue);
         etOrganizer = findViewById(R.id.spinner);
         etPhone = findViewById(R.id.etPhone);
+        imageView = findViewById(R.id.imageViewEvent);
 
         btnUpdate = findViewById(R.id.btnUpdate);
 
@@ -49,11 +56,20 @@ public class UpdateActivity extends AppCompatActivity {
         gson = new Gson();
         event = gson.fromJson(eventData, Event.class);
 
+
         etName.setText(event.getName());
         etDataTime.setText(event.getDateTime());
         etVenue.setText(event.getVenue());
         etOrganizer.setText(event.getOName());
         etPhone.setText(event.getPhone());
+
+
+        byte[] encodeByte = Base64.decode(event.getImage(), Base64.DEFAULT);
+        bm = BitmapFactory.decodeByteArray(encodeByte, 0,
+                encodeByte.length);
+
+
+        imageView.setImageBitmap(bm);
 
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
