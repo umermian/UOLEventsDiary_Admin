@@ -3,12 +3,16 @@ package com.example.popie.uoleventsdiary_admin.Client;
 
 import android.widget.ImageView;
 
+import com.example.popie.uoleventsdiary_admin.LoginActivity;
 import com.example.popie.uoleventsdiary_admin.Models.Event;
 import com.example.popie.uoleventsdiary_admin.Models.Login;
 import com.example.popie.uoleventsdiary_admin.Models.Organizer;
 import com.example.popie.uoleventsdiary_admin.Models.User;
+import com.example.popie.uoleventsdiary_admin.Retrofit.Token;
 
+import java.io.StringReader;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -24,6 +28,8 @@ import retrofit2.http.Path;
 
 public interface UserClient {
 
+    String token = LoginActivity.sharedPreferences.getString("token", "");
+
     //for admin login
     @POST("login")
     Call<User> login(@Body Login login);
@@ -31,9 +37,9 @@ public interface UserClient {
     @POST("logout")
     Call<Void> logout();
 
-    //to retrieve all the organizers
-    @GET("organizers")
-    Call<List<Organizer>> getOrganizers();
+//    to retrieve all the organizers
+//    @GET("organizers")
+//    Call<List<Organizer>> getOrganizers();
 
     //to retrieve all the events
     @GET("events")

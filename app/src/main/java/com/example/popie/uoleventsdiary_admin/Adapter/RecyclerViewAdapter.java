@@ -68,9 +68,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         final Event event = events.get(position);
 
-        Picasso.with(context)
-                .load(R.drawable.picture)
-                .into(holder.circleImageView);
+        byte[] encodeByte = Base64.decode(event.getImage(), Base64.DEFAULT);
+        Bitmap bm = BitmapFactory.decodeByteArray(encodeByte, 0,
+                encodeByte.length);
+
+//        Picasso.with(context)
+//                .load()
+//                .into(holder.circleImageView);
+
+        holder.circleImageView.setImageBitmap(bm);
 
         holder.eventName.setText(event.getName());
 

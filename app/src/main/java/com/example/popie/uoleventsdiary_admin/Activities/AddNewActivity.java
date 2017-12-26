@@ -18,6 +18,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.popie.uoleventsdiary_admin.Client.UserClient;
+import com.example.popie.uoleventsdiary_admin.LoginActivity;
 import com.example.popie.uoleventsdiary_admin.Models.Event;
 import com.example.popie.uoleventsdiary_admin.R;
 import com.example.popie.uoleventsdiary_admin.Retrofit.Remote;
@@ -25,6 +26,7 @@ import com.example.popie.uoleventsdiary_admin.Retrofit.Remote;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -33,7 +35,7 @@ import retrofit2.Retrofit;
 public class AddNewActivity extends AppCompatActivity {
 
     final static int GET_FROM_GALLERY = 3;
-    ImageView imageView;
+    CircleImageView imageView;
     Button btnAdd;
     EditText etName, etDateTime, etVenue, etPhone;
     Spinner spinner;
@@ -42,6 +44,7 @@ public class AddNewActivity extends AppCompatActivity {
     UserClient userClient;
     ArrayAdapter<CharSequence> arrayAdapter;
     int o_id;
+    int u_id = LoginActivity.sharedPreferences.getInt("id", 12);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +105,7 @@ public class AddNewActivity extends AppCompatActivity {
         phone = etPhone.getText().toString();
 
 
-        Call<Event> call = userClient.saveEvent(image, name, dateTime, venue, phone, 12, o_id);
+        Call<Event> call = userClient.saveEvent(image, name, dateTime, venue, phone, u_id, o_id);
 
         call.enqueue(new Callback<Event>() {
 

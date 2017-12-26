@@ -1,5 +1,6 @@
 package com.example.popie.uoleventsdiary_admin.Activities;
 
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,6 +10,8 @@ import android.widget.Toast;
 
 import com.example.popie.uoleventsdiary_admin.Adapter.RecyclerViewAdapter;
 import com.example.popie.uoleventsdiary_admin.Client.UserClient;
+import com.example.popie.uoleventsdiary_admin.LoginActivity;
+import com.example.popie.uoleventsdiary_admin.Models.Data;
 import com.example.popie.uoleventsdiary_admin.Models.Event;
 import com.example.popie.uoleventsdiary_admin.R;
 import com.example.popie.uoleventsdiary_admin.Retrofit.Remote;
@@ -28,6 +31,7 @@ public class ViewAllActivity extends AppCompatActivity {
     RecyclerViewAdapter adapter;
     Retrofit retrofit;
     UserClient userClient;
+    String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +44,8 @@ public class ViewAllActivity extends AppCompatActivity {
         retrofit = Remote.getRetrofit();
 
         userClient = retrofit.create(UserClient.class);
+
+        token = LoginActivity.sharedPreferences.getString("auth", "");
 
         Call<List<Event>> call = userClient.getEvents();
 

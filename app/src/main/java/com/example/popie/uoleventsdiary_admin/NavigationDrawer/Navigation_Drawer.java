@@ -36,7 +36,14 @@ public class Navigation_Drawer extends AppCompatActivity
     Retrofit retrofit;
     UserClient userClient;
     Call<Void> call;
+;
 
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +114,7 @@ public class Navigation_Drawer extends AppCompatActivity
                         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                         startActivity(intent);
                         finish();
+                        Toast.makeText(getApplicationContext(), "You've been logged out", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(getApplicationContext(), "Response Failure", Toast.LENGTH_SHORT).show();
                     }

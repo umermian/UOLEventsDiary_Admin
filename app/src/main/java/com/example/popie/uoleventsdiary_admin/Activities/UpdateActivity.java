@@ -1,8 +1,11 @@
 package com.example.popie.uoleventsdiary_admin.Activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
@@ -17,10 +20,15 @@ import android.widget.AdapterView;
 
 import com.example.popie.uoleventsdiary_admin.Client.UserClient;
 import com.example.popie.uoleventsdiary_admin.Models.Event;
+import com.example.popie.uoleventsdiary_admin.NavigationDrawer.Navigation_Drawer;
 import com.example.popie.uoleventsdiary_admin.R;
 import com.example.popie.uoleventsdiary_admin.Retrofit.Remote;
 import com.google.gson.Gson;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -36,9 +44,10 @@ public class UpdateActivity extends AppCompatActivity {
     Retrofit retrofit;
     Call<Event> call;
     UserClient userClient;
-    ImageView imageView;
+    CircleImageView imageView;
     Bitmap bm;
     ArrayAdapter<CharSequence> arrayAdapter;
+    String image = null;
     int o_id;
     int position;
 
@@ -83,6 +92,7 @@ public class UpdateActivity extends AppCompatActivity {
 
         imageView.setImageBitmap(bm);
 
+
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -95,15 +105,29 @@ public class UpdateActivity extends AppCompatActivity {
             }
         });
 
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), AddNewActivity.GET_FROM_GALLERY);
+            }
+        });
+
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                call = userClient.updateEvent(event.getId(), event.getImage(), etName.getText().toString(), etDataTime.getText().toString(), etVenue.getText().toString(), etPhone.getText().toString(), 12, o_id);
+                if (image == null) {
+                    call = userClient.updateEvent(event.getId(), event.getImage(), etName.getText().toString(), etDataTime.getText().toString(), etVenue.getText().toString(), etPhone.getText().toString(), 12, o_id);
+                } else {
+                    call = userClient.updateEvent(event.getId(), image, etName.getText().toString(), etDataTime.getText().toString(), etVenue.getText().toString(), etPhone.getText().toString(), 12, o_id);
+                }
                 call.enqueue(new Callback<Event>() {
                     @Override
                     public void onResponse(Call<Event> call, Response<Event> response) {
                         if (response.isSuccessful()) {
                             Toast.makeText(getApplicationContext(), "Updated Successfully", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getApplicationContext(), Navigation_Drawer.class);
+                            startActivity(intent);
+                            finish();
                         } else {
                             Toast.makeText(getApplicationContext(), "Response Failure", Toast.LENGTH_SHORT).show();
                         }
@@ -116,6 +140,32 @@ public class UpdateActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+
+        //Detects request codes
+        if (requestCode == AddNewActivity.GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
+            Uri selectedImage = data.getData();
+            Bitmap bitmap = null;
+
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
+                imageView.setImageBitmap(bitmap);
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 70, baos);
+                byte[] b = baos.toByteArray();
+                image = Base64.encodeToString(b, Base64.NO_WRAP);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+        }
     }
 
 }

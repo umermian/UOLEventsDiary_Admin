@@ -30,7 +30,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class LoginActivity extends AppCompatActivity {
 
     public static SharedPreferences sharedPreferences;
-    String token; //token authentication
+
     Button login; //login button
     Retrofit retrofit; //retrofit object
     UserClient userClient; // userClient Object
@@ -93,11 +93,10 @@ public class LoginActivity extends AppCompatActivity {
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("email", "admin123@gmail.com");
                     editor.putString("password", "admin123");
+                    editor.putString("auth", response.body().getData().getApiToken());
+                    editor.putInt("id", response.body().getData().getId());
                     editor.apply();
-                    token = response.body().getData().getApiToken();
                     Intent intent = new Intent(LoginActivity.this, Navigation_Drawer.class);
-                    intent.putExtra("token", token);
-                    intent.putExtra("email","admin123@gmail.com");
                     startActivity(intent);
                     Toast.makeText(getApplicationContext(), "Welcome Admin!", Toast.LENGTH_SHORT).show();
                     finish();

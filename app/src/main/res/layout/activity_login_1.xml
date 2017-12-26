@@ -17,6 +17,7 @@
         android:layout_marginStart="41dp"
         android:text="@string/email"
         android:textAlignment="viewStart"
+        android:textColor="@color/colorPrimary"
         android:textStyle="bold" />
 
     <TextView
@@ -26,6 +27,7 @@
         android:layout_alignStart="@+id/textViewName"
         android:layout_centerVertical="true"
         android:text="@string/password"
+        android:textColor="@color/colorPrimary"
         android:textStyle="bold" />
 
     <EditText
@@ -38,7 +40,8 @@
         android:layout_toEndOf="@+id/textViewPassword"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="" />
+        android:text=""
+        android:textColor="@color/colorPrimaryDark" />
 
     <Button
         android:id="@+id/buttonLogin"
@@ -46,8 +49,10 @@
         android:layout_height="wrap_content"
         android:layout_alignEnd="@+id/editTextPassword"
         android:layout_below="@+id/editTextPassword"
-        android:layout_marginTop="70dp"
-        android:text="@string/login" />
+        android:layout_marginTop="66dp"
+        android:background="?attr/colorAccent"
+        android:text="@string/login"
+        android:textColor="@color/colorPrimary" />
 
     <EditText
         android:id="@+id/editTextPassword"
@@ -56,7 +61,8 @@
         android:layout_alignBottom="@+id/textViewPassword"
         android:layout_alignStart="@+id/editTextName"
         android:ems="10"
-        android:inputType="textPassword" />
+        android:inputType="textPassword"
+        android:textColor="@color/colorPrimaryDark" />
 
     <TextView
         android:id="@+id/textView5"
@@ -65,5 +71,6 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="24dp"
-        android:text="@string/welcome_to_admin_login" />
+        android:text="@string/welcome_to_admin_login"
+        android:textColor="@color/colorPrimary" />
 </RelativeLayout>
